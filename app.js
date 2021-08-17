@@ -1,46 +1,47 @@
-
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const corsOptions = {
-  origin: '*'
-}
+  origin: "*"
+};
 
-const app = express()
-const port = process.env.PORT || 9010
+const app = express();
+const port = process.env.PORT || 9010;
 
-const db  = require('./config/keys').mongoURI;
-const blogRoute = require('./src/routes/blogroute')
+const db = require("./config/keys").mongoURI;
+const authRoute = require("./src/routes/blogroute");
 mongoose
-	.connect(db,{
+  .connect(db, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
     useFindAndModify: true,
     retryWrites: true
-})
-	.then(() => {
-		console.log("MongoDB connected .....")
-	})
-	.catch((err) => {
-		console.log(err)
-	})
+  })
+  .then(() => {
+    console.log("MongoDB connected .....");
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.get("/", (req, res) => res.send("Hello World!"));
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use('/images', express.static('images'));
-app.use(bodyParser.json())
-app.use(cors(corsOptions))
+app.use("/images", express.static("images"));
+app.use(bodyParser.json());
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}));
-app.use('/api/v1/blog', blogRoute)
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+);
+app.use("/api/v1/blog", authRoute);
 
 app.listen(port, () => {
-  console.log('server running a port at ' + port)
-})
+  console.log("server running a port at " + port);
+});
