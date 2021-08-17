@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 9010;
 
 const db = require("./config/keys").mongoURI;
-const authRoute = require("./src/routes/blogroute");
+const blogRoute = require("./src/routes/blogroute");
 mongoose
   .connect(db, {
     useNewUrlParser: true,
@@ -40,7 +40,7 @@ app.use(
     extended: true
   })
 );
-app.use("/api/v1/blog", authRoute);
+app.use("/api/v1/blog", blogRoute);
 
 app.listen(port, () => {
   console.log("server running a port at " + port);
